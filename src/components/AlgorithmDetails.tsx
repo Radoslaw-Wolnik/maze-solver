@@ -39,7 +39,7 @@ export function AlgorithmDetails({ algorithm }: AlgorithmDetailsProps) {
             What to watch
           </div>
           <p className="mt-1 text-sm leading-5 text-emerald-950">
-            Watch the yellow active head, amber queued candidates, and route overlays.
+            Watch the yellow candidate heads, current cell, and route overlays.
             Green circles trace route previews as the solver evaluates each cell.
           </p>
         </div>

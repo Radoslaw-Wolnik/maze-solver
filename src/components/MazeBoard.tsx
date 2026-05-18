@@ -28,14 +28,18 @@ export function MazeBoard({ maze, snapshot }: MazeBoardProps) {
           const key = cellKey(cell)
           const isStart = sameCell(cell, maze.start)
           const isGoal = sameCell(cell, maze.goal)
-          const isHead = current === key || currentHeads.has(key)
+          const isCurrent = current === key
+          const isCandidateHead =
+            (frontier.has(key) || currentHeads.has(key)) && !isCurrent
 
           return (
             <div
               key={key}
               className={clsx(
                 'relative min-h-0 transition-colors duration-150',
-                isHead ? 'bg-yellow-200' : visited.has(key) && 'bg-sky-100',
+                isCandidateHead
+                  ? 'bg-yellow-200'
+                  : visited.has(key) && 'bg-sky-100',
               )}
               style={{
                 borderTop: cell.walls.north
@@ -52,14 +56,14 @@ export function MazeBoard({ maze, snapshot }: MazeBoardProps) {
                   : '2px solid rgba(212, 212, 216, 0.4)',
               }}
             >
-              {frontier.has(key) && !isStart && !isGoal && (
-                <span className="absolute inset-[24%] rounded-sm bg-amber-300/85 shadow-[0_0_0_1px_rgba(146,64,14,0.25)]" />
-              )}
               {secondaryPath.has(key) && !isStart && !isGoal && (
                 <span className="absolute inset-[28%] rounded-full bg-emerald-700/70 shadow-[0_0_0_1px_rgba(4,120,87,0.2)]" />
               )}
               {path.has(key) && !isStart && !isGoal && (
                 <span className="absolute inset-[18%] rounded-full bg-emerald-500/75 shadow-[0_0_0_1px_rgba(4,120,87,0.25)]" />
+              )}
+              {isCurrent && !isStart && !isGoal && (
+                <span className="absolute inset-[22%] z-10 rounded-full bg-violet-600 shadow-[0_0_0_2px_rgba(255,255,255,0.95),0_0_0_4px_rgba(109,40,217,0.35)]" />
               )}
               {(isStart || isGoal) && (
                 <span

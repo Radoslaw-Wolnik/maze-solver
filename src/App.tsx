@@ -66,7 +66,7 @@ function App() {
                 <span className="rounded-md bg-sky-100 px-3 py-2 text-sky-800">
                   visited
                 </span>
-                <span className="rounded-md bg-amber-200 px-3 py-2 text-amber-950">
+                <span className="rounded-md bg-yellow-200 px-3 py-2 text-yellow-950">
                   queued candidate
                 </span>
                 <span className="inline-flex items-center gap-2 rounded-md bg-white px-3 py-2 text-zinc-800 ring-1 ring-zinc-200">
@@ -74,11 +74,7 @@ function App() {
                   start route
                 </span>
                 <span className="inline-flex items-center gap-2 rounded-md bg-white px-3 py-2 text-zinc-800 ring-1 ring-zinc-200">
-                  <span className="h-3 w-3 rounded-full bg-emerald-700/80" />
-                  goal route
-                </span>
-                <span className="inline-flex items-center gap-2 rounded-md bg-white px-3 py-2 text-zinc-800 ring-1 ring-zinc-200">
-                  <span className="h-3 w-3 rounded-[2px] bg-yellow-200 ring-1 ring-yellow-500/40" />
+                  <span className="h-3 w-3 rounded-full bg-violet-600 shadow-[0_0_0_2px_rgba(255,255,255,0.95),0_0_0_3px_rgba(109,40,217,0.3)]" />
                   current cell
                 </span>
               </div>
