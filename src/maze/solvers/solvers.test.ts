@@ -78,6 +78,19 @@ describe('maze solvers', () => {
     ).toBe(true)
   })
 
+  it('shows flood-fill distance spreading before following the route', () => {
+    const maze = generateMaze({ rows: 13, cols: 13, seed: 42 })
+    const solver = solverDefinitions.find((definition) => definition.id === 'floodFill')!
+    const result = solver.solve(maze)
+
+    expect(
+      result.snapshots.some(
+        (snapshot) => snapshot.visited.length > 1 && snapshot.path.length === 0,
+      ),
+    ).toBe(true)
+    expect(result.snapshots.some((snapshot) => snapshot.path.length > 1)).toBe(true)
+  })
+
   it('keeps the wall follower walk separate from its pruned route', () => {
     const maze = generateMaze({ rows: 17, cols: 17, seed: 256 })
     const solver = solverDefinitions.find(

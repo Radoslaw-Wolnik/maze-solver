@@ -4,9 +4,17 @@ import type { Coordinate, Maze, SolverResult } from '../types'
 import type { SearchTrace } from './createSnapshots'
 import { toResult } from './createSnapshots'
 
-function buildDistanceMap(maze: Maze): Map<string, number> {
+type DistanceMapResult = {
+  distances: Map<string, number>
+  traces: SearchTrace[]
+  frontierPeak: number
+}
+
+function buildDistanceMap(maze: Maze): DistanceMapResult {
   const queue = [maze.goal]
   const distances = new Map<string, number>([[cellKey(maze.goal), 0]])
+  const traces: SearchTrace[] = []
+  let frontierPeak = queue.length
 
   while (queue.length > 0) {
     const current = queue.shift()!
@@ -22,9 +30,18 @@ function buildDistanceMap(maze: Maze): Map<string, number> {
       distances.set(key, currentDistance + 1)
       queue.push(neighbor)
     }
+
+    frontierPeak = Math.max(frontierPeak, queue.length)
+    traces.push({
+      current,
+      visited: new Set(distances.keys()),
+      frontier: [...queue],
+      path: [],
+      label: 'Flood fill spreads distance labels outward from the goal',
+    })
   }
 
-  return distances
+  return { distances, traces, frontierPeak }
 }
 
 function lowestDistanceNeighbor(
@@ -41,14 +58,15 @@ function lowestDistanceNeighbor(
 }
 
 export function solveWithFloodFill(maze: Maze): SolverResult {
-  const distances = buildDistanceMap(maze)
-  const traces: SearchTrace[] = []
-  const visited = new Set<string>()
+  const distanceMap = buildDistanceMap(maze)
+  const { distances } = distanceMap
+  const traces: SearchTrace[] = [...distanceMap.traces]
+  const labelledCells = new Set(distances.keys())
   const path: Coordinate[] = [maze.start]
   let current = maze.start
+  let frontierPeak = distanceMap.frontierPeak
 
   while (!sameCell(current, maze.goal)) {
-    visited.add(cellKey(current))
     const next = lowestDistanceNeighbor(maze, current, distances)
 
     if (!next) {
@@ -56,22 +74,22 @@ export function solveWithFloodFill(maze: Maze): SolverResult {
     }
 
     const frontier = getOpenNeighbors(maze, current)
+    frontierPeak = Math.max(frontierPeak, frontier.length)
     traces.push({
       current,
-      visited: new Set(visited),
+      visited: new Set(labelledCells),
       frontier,
       path: [...path],
-      label: 'Flood fill follows the steepest distance drop toward the goal',
+      label: 'Flood fill follows lower distance labels toward the goal',
     })
 
     current = next
     path.push(current)
   }
 
-  visited.add(cellKey(current))
   traces.push({
     current,
-    visited,
+    visited: labelledCells,
     frontier: [],
     path,
     label: 'The distance gradient reaches the goal',
@@ -83,6 +101,6 @@ export function solveWithFloodFill(maze: Maze): SolverResult {
     description: 'Builds a distance grid from the goal, then walks downhill from the start.',
     traces,
     path,
-    frontierPeak: Math.max(...traces.map((trace) => trace.frontier.length), 1),
+    frontierPeak,
   })
 }

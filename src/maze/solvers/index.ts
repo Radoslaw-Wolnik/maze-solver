@@ -95,13 +95,13 @@ export const solverDefinitions: SolverDefinition[] = [
     title: 'Flood fill',
     shortName: 'Flood',
     category: 'mapBased',
-    description: 'Known-maze distance gradient to the goal.',
+    description: 'Distance labels spread from the goal, then guide the route.',
     details:
-      'Flood fill labels cells by distance from the goal, then follows lower numbers from the start. This implementation assumes the maze is already known, so it behaves as a map-based planner rather than a discovery algorithm.',
+      'Flood fill expands outward from the goal, labeling each reachable cell by distance. Once the wave reaches the maze, the solver starts at the entrance and follows lower labels step by step until it reaches the exit.',
     timeComplexity: 'O(V + E)',
     spaceComplexity: 'O(V)',
-    bestFor: 'Known mazes where a compact distance map should guide the route.',
-    tradeOff: 'This version assumes the maze map is already known before the run begins.',
+    bestFor: 'Mazes where a compact distance field can guide a clean route.',
+    tradeOff: 'It spends time labeling the reachable space before walking the final route.',
     solve: solveWithFloodFill,
   },
   {
