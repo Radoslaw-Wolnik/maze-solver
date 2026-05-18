@@ -18,7 +18,14 @@ describe('maze solvers', () => {
 
   it('keeps optimal algorithms on the same shortest path length', () => {
     const maze = generateMaze({ rows: 17, cols: 17, seed: 256 })
-    const pathLengths = ['bfs', 'dijkstra', 'astar'].map((id) => {
+    const pathLengths = [
+      'bfs',
+      'dijkstra',
+      'astar',
+      'bidirectionalAstar',
+      'floodFill',
+      'deadEndFilling',
+    ].map((id) => {
       const solver = solverDefinitions.find((definition) => definition.id === id)!
 
       return solver.solve(maze).path.length
@@ -34,5 +41,27 @@ describe('maze solvers', () => {
 
     expect(solvingFrame).toBeDefined()
     expect(result.snapshots.at(-1)?.path.length).toBe(result.path.length)
+  })
+
+  it('keeps algorithms grouped by search style', () => {
+    const categories = new Set(solverDefinitions.map((solver) => solver.category))
+
+    expect(categories).toEqual(new Set(['multiHead', 'singleHead']))
+    expect(solverDefinitions.filter((solver) => solver.category === 'multiHead').length)
+      .toBeGreaterThan(0)
+    expect(solverDefinitions.filter((solver) => solver.category === 'singleHead').length)
+      .toBeGreaterThan(0)
+  })
+
+  it('shows two active heads for bidirectional search frames', () => {
+    const maze = generateMaze({ rows: 15, cols: 15, seed: 123 })
+    const solver = solverDefinitions.find(
+      (definition) => definition.id === 'bidirectionalAstar',
+    )!
+    const result = solver.solve(maze)
+
+    expect(
+      result.snapshots.some((snapshot) => (snapshot.currentHeads?.length ?? 0) > 1),
+    ).toBe(true)
   })
 })
