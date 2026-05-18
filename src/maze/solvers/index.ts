@@ -20,6 +20,8 @@ export const solverDefinitions: SolverDefinition[] = [
     spaceComplexity: 'O(V)',
     bestFor: 'Unweighted mazes where the shortest route matters.',
     tradeOff: 'It can visit a lot of cells because it spreads evenly in every direction.',
+    watchFor:
+      'The frontier forms a widening wave from the start. When the goal first appears in that wave, the highlighted route is already shortest.',
     solve: solveWithBfs,
   },
   {
@@ -34,6 +36,8 @@ export const solverDefinitions: SolverDefinition[] = [
     spaceComplexity: 'O(V)',
     bestFor: 'Fast exploration when any valid route is enough.',
     tradeOff: 'It does not guarantee the shortest route and can wander deep into the wrong branch.',
+    watchFor:
+      'The current cell dives down one corridor at a time. Backtracking starts when that branch runs out of unvisited neighbors.',
     solve: solveWithDfs,
   },
   {
@@ -48,6 +52,8 @@ export const solverDefinitions: SolverDefinition[] = [
     spaceComplexity: 'O(V)',
     bestFor: 'Weighted mazes where different cells or moves have different costs.',
     tradeOff: 'Without a goal-directed heuristic it may still explore broadly before reaching the exit.',
+    watchFor:
+      'Cells are chosen by the lowest known cost from the start. In this equal-cost maze, the wave looks close to BFS because every move costs one.',
     solve: (maze: Maze) =>
       solveWithWeightedSearch(maze, {
         algorithm: 'dijkstra',
@@ -68,6 +74,8 @@ export const solverDefinitions: SolverDefinition[] = [
     spaceComplexity: 'O(V)',
     bestFor: 'Finding shortest paths quickly when a useful distance estimate exists.',
     tradeOff: 'Its quality depends on the heuristic; a bad heuristic can remove much of the advantage.',
+    watchFor:
+      'The frontier leans toward the exit instead of spreading evenly. It still keeps enough alternatives open to preserve a shortest path.',
     solve: (maze: Maze) =>
       solveWithWeightedSearch(maze, {
         algorithm: 'astar',
@@ -88,6 +96,8 @@ export const solverDefinitions: SolverDefinition[] = [
     spaceComplexity: 'O(b^(d/2)) typical',
     bestFor: 'Large mazes with known start and goal positions.',
     tradeOff: 'The bookkeeping is more complex, and the win depends on the two searches meeting cleanly.',
+    watchFor:
+      'Two search heads grow from opposite ends. The route appears when the start-side and goal-side explored regions connect.',
     solve: solveWithBidirectionalAstar,
   },
   {
@@ -102,6 +112,8 @@ export const solverDefinitions: SolverDefinition[] = [
     spaceComplexity: 'O(V)',
     bestFor: 'Mazes where a compact distance field can guide a clean route.',
     tradeOff: 'It spends time labeling the reachable space before walking the final route.',
+    watchFor:
+      'Distance labels spread from the goal first. After labeling, the final path simply follows decreasing distances back to the exit.',
     solve: solveWithFloodFill,
   },
   {
@@ -116,6 +128,8 @@ export const solverDefinitions: SolverDefinition[] = [
     spaceComplexity: 'O(1)',
     bestFor: 'Robots with almost no memory in mazes without isolated wall islands.',
     tradeOff: 'The run can take a long tour; pruning only happens after the exit is already found.',
+    watchFor:
+      'The walker turns right whenever it can, otherwise goes forward, left, or back. The walked trail can be messy before the cleaned route is shown.',
     solve: solveWithWallFollower,
   },
   {
@@ -130,6 +144,8 @@ export const solverDefinitions: SolverDefinition[] = [
     spaceComplexity: 'O(V)',
     bestFor: 'Known perfect mazes or preprocessing passes that reveal the essential corridor.',
     tradeOff: 'It needs enough map knowledge to identify dead ends before committing to the final route.',
+    watchFor:
+      'Dead ends disappear first. The useful corridor becomes clearer as leaves that cannot lead to the goal are removed.',
     solve: solveWithDeadEndFilling,
   },
 ]

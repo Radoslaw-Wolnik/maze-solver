@@ -65,5 +65,6 @@ export type SolverDefinition = {
   spaceComplexity: string
   bestFor: string
   tradeOff: string
+  watchFor: string
   solve: (maze: Maze) => SolverResult
 }

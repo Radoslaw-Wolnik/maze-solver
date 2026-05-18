@@ -39,8 +39,7 @@ export function AlgorithmDetails({ algorithm }: AlgorithmDetailsProps) {
             What to watch
           </div>
           <p className="mt-1 text-sm leading-5 text-emerald-950">
-            Watch the yellow candidate heads, current cell, and route overlays.
-            Green circles trace route previews as the solver evaluates each cell.
+            {algorithm.watchFor}
           </p>
         </div>
       </div>
@@ -63,6 +62,11 @@ export function AlgorithmDetails({ algorithm }: AlgorithmDetailsProps) {
           </p>
         </div>
       </div>
+      <p className="mt-3 text-xs leading-5 text-zinc-500">
+        Notation: V is the number of cells, E is the number of passages between
+        cells, b is the average branching choices per step, and d is the length
+        of the solution path.
+      </p>
     </section>
   )
 }
