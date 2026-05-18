@@ -91,6 +91,15 @@ describe('maze solvers', () => {
     expect(result.snapshots.some((snapshot) => snapshot.path.length > 1)).toBe(true)
   })
 
+  it('stops flood-fill labeling once the start has a distance', () => {
+    const maze = generateMaze({ rows: 17, cols: 17, seed: 256 })
+    const solver = solverDefinitions.find((definition) => definition.id === 'floodFill')!
+    const result = solver.solve(maze)
+    const firstRouteFrame = result.snapshots.find((snapshot) => snapshot.path.length > 0)
+
+    expect(firstRouteFrame?.visited.length).toBeLessThan(maze.rows * maze.cols)
+  })
+
   it('keeps the wall follower walk separate from its pruned route', () => {
     const maze = generateMaze({ rows: 17, cols: 17, seed: 256 })
     const solver = solverDefinitions.find(

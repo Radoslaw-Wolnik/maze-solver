@@ -39,6 +39,10 @@ function buildDistanceMap(maze: Maze): DistanceMapResult {
       path: [],
       label: 'Flood fill spreads distance labels outward from the goal',
     })
+
+    if (sameCell(current, maze.start)) {
+      break
+    }
   }
 
   return { distances, traces, frontierPeak }
