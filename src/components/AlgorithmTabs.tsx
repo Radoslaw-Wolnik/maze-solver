@@ -13,8 +13,13 @@ export function AlgorithmTabs({
   onSelect,
 }: AlgorithmTabsProps) {
   return (
-    <section className="grid gap-2">
-      <h2 className="text-sm font-semibold text-zinc-950">Algorithms</h2>
+    <section className="grid content-start gap-2">
+      <div>
+        <h2 className="text-sm font-semibold text-zinc-950">Algorithms</h2>
+        <p className="text-xs leading-5 text-zinc-500">
+          Select an algorithm and watch how it works through the maze.
+        </p>
+      </div>
       <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
         {algorithms.map((algorithm) => (
           <button
