@@ -7,6 +7,8 @@ export type SearchTrace = {
   visited: Set<string>
   frontier: Coordinate[]
   path: Coordinate[]
+  secondaryPath?: Coordinate[]
+  walkedTrail?: Coordinate[]
   label: string
 }
 
@@ -33,6 +35,8 @@ export function toResult({
     visited: [...trace.visited],
     frontier: trace.frontier.map(cellKey),
     path: trace.path.map(cellKey),
+    secondaryPath: trace.secondaryPath?.map(cellKey),
+    walkedTrail: trace.walkedTrail?.map(cellKey),
     label: trace.label,
   }))
 
@@ -41,6 +45,7 @@ export function toResult({
     visited: snapshots.at(-1)?.visited ?? [],
     frontier: [],
     path: pathKeys,
+    walkedTrail: snapshots.at(-1)?.walkedTrail,
     label: path.length > 0 ? `Shortest path found (${path.length} cells)` : 'No path found',
   })
 

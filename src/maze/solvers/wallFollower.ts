@@ -32,6 +32,30 @@ function chooseRightHandDirection(maze: Maze, cell: Coordinate, facing: Directio
   return options.find((direction) => !walls[direction]) ?? facing
 }
 
+function pruneWalkedPath(path: Coordinate[]): Coordinate[] {
+  const pruned: Coordinate[] = []
+  const indexByCell = new Map<string, number>()
+
+  for (const cell of path) {
+    const key = cellKey(cell)
+    const previousIndex = indexByCell.get(key)
+
+    if (previousIndex !== undefined) {
+      for (const removed of pruned.slice(previousIndex + 1)) {
+        indexByCell.delete(cellKey(removed))
+      }
+
+      pruned.splice(previousIndex + 1)
+      continue
+    }
+
+    indexByCell.set(key, pruned.length)
+    pruned.push(cell)
+  }
+
+  return pruned
+}
+
 export function solveWithWallFollower(maze: Maze): SolverResult {
   const visited = new Set<string>()
   const traces: SearchTrace[] = []
@@ -48,7 +72,8 @@ export function solveWithWallFollower(maze: Maze): SolverResult {
       current,
       visited: new Set(visited),
       frontier: [move(current, facing)],
-      path: [...path],
+      path: [],
+      walkedTrail: [...path],
       label: 'The mouse keeps its right hand on the wall and advances one cell',
     })
 
@@ -57,22 +82,26 @@ export function solveWithWallFollower(maze: Maze): SolverResult {
   }
 
   visited.add(cellKey(current))
+  const solved = sameCell(current, maze.goal)
+  const finalPath = solved ? pruneWalkedPath(path) : []
+
   traces.push({
     current,
     visited,
     frontier: [],
-    path,
-    label: sameCell(current, maze.goal)
-      ? 'Wall following reached the exit'
+    path: finalPath,
+    walkedTrail: path,
+    label: solved
+      ? 'Wall following reached the exit and pruned loops from its route'
       : 'Wall following stopped after a full traversal budget',
   })
 
   return toResult({
     algorithm: 'wallFollower',
     title: 'Wall follower',
-    description: 'A single-head right-hand rule that needs no global map.',
+    description: 'A single-head right-hand rule that loop-erases its route after escape.',
     traces,
-    path: sameCell(current, maze.goal) ? path : [],
+    path: finalPath,
     frontierPeak: 1,
   })
 }

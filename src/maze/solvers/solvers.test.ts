@@ -64,4 +64,30 @@ describe('maze solvers', () => {
       result.snapshots.some((snapshot) => (snapshot.currentHeads?.length ?? 0) > 1),
     ).toBe(true)
   })
+
+  it('previews both sides of bidirectional search', () => {
+    const maze = generateMaze({ rows: 15, cols: 15, seed: 123 })
+    const solver = solverDefinitions.find(
+      (definition) => definition.id === 'bidirectionalAstar',
+    )!
+    const result = solver.solve(maze)
+
+    expect(result.snapshots.some((snapshot) => snapshot.path.length > 1)).toBe(true)
+    expect(
+      result.snapshots.some((snapshot) => (snapshot.secondaryPath?.length ?? 0) > 1),
+    ).toBe(true)
+  })
+
+  it('keeps the wall follower walk separate from its pruned route', () => {
+    const maze = generateMaze({ rows: 17, cols: 17, seed: 256 })
+    const solver = solverDefinitions.find(
+      (definition) => definition.id === 'wallFollower',
+    )!
+    const result = solver.solve(maze)
+    const finalSnapshot = result.snapshots.at(-1)!
+
+    expect(finalSnapshot.walkedTrail?.length).toBeGreaterThanOrEqual(result.path.length)
+    expect(result.path[0]).toEqual(maze.start)
+    expect(result.path.at(-1)).toEqual(maze.goal)
+  })
 })

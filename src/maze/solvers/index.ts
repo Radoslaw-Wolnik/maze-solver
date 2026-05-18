@@ -111,11 +111,11 @@ export const solverDefinitions: SolverDefinition[] = [
     category: 'singleHead',
     description: 'Right-hand rule with one physical cursor.',
     details:
-      'The wall follower keeps one hand on a wall and chooses right, forward, left, then back. It is old, tiny, and charmingly stubborn: excellent for simply connected mazes, but not a shortest-path algorithm.',
+      'The wall follower keeps one hand on a wall and chooses right, forward, left, then back. Once it reaches the exit, this visualizer loop-erases the walk so you can compare the messy physical run with the cleaned route.',
     timeComplexity: 'O(V) on simply connected mazes',
     spaceComplexity: 'O(1)',
     bestFor: 'Robots with almost no memory in mazes without isolated wall islands.',
-    tradeOff: 'It can take a long tour and can fail in mazes with loops around islands.',
+    tradeOff: 'The run can take a long tour; pruning only happens after the exit is already found.',
     solve: solveWithWallFollower,
   },
   {

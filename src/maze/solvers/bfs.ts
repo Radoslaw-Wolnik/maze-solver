@@ -45,7 +45,7 @@ export function solveWithBfs(maze: Maze): SolverResult {
       visited: new Set(visited),
       frontier: [...queue],
       path: reconstructPath(cameFrom, maze.start, current),
-      label: 'Breadth-first search expands all cells at the current distance',
+      label: 'BFS has one active head; the amber queue shows where it may jump next',
     })
   }
 

@@ -14,6 +14,14 @@ type SearchSide = {
   target: Coordinate
 }
 
+function reconstructPartialPath(
+  side: SearchSide,
+  origin: Coordinate,
+  current?: Coordinate,
+): Coordinate[] {
+  return current ? reconstructPath(side.cameFrom, origin, current) : []
+}
+
 function createSide(origin: Coordinate, target: Coordinate): SearchSide {
   const frontier = new PriorityQueue()
 
@@ -96,7 +104,8 @@ export function solveWithBidirectionalAstar(maze: Maze): SolverResult {
         currentHeads: [fromStart, fromGoal].filter(Boolean) as Coordinate[],
         visited,
         frontier,
-        path: combinePath(startSide, goalSide, maze.start, maze.goal, meetingPoint),
+        path: reconstructPath(startSide.cameFrom, maze.start, meetingPoint),
+        secondaryPath: reconstructPath(goalSide.cameFrom, maze.goal, meetingPoint),
         label: 'The two A* frontiers met in the maze',
       })
       break
@@ -107,8 +116,9 @@ export function solveWithBidirectionalAstar(maze: Maze): SolverResult {
       currentHeads: [fromStart, fromGoal].filter(Boolean) as Coordinate[],
       visited,
       frontier,
-      path: fromStart ? reconstructPath(startSide.cameFrom, maze.start, fromStart) : [],
-      label: 'Bidirectional A* expands one head from each end',
+      path: reconstructPartialPath(startSide, maze.start, fromStart),
+      secondaryPath: reconstructPartialPath(goalSide, maze.goal, fromGoal),
+      label: 'Bidirectional A* previews both searches until the frontiers meet',
     })
   }
 

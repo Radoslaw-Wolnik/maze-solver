@@ -39,8 +39,8 @@ export function AlgorithmDetails({ algorithm }: AlgorithmDetailsProps) {
             What to watch
           </div>
           <p className="mt-1 text-sm leading-5 text-emerald-950">
-            Follow the green trail to see the route this algorithm currently
-            believes is promising.
+            Watch the outlined head, amber frontier, and route overlays. Green is
+            the start-side route; purple is a goal-side route when an algorithm has one.
           </p>
         </div>
       </div>

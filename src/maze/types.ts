@@ -38,6 +38,8 @@ export type SolverSnapshot = {
   visited: string[]
   frontier: string[]
   path: string[]
+  secondaryPath?: string[]
+  walkedTrail?: string[]
   label: string
 }
 
