@@ -15,13 +15,13 @@ export const solverDefinitions: SolverDefinition[] = [
     category: 'mapBased',
     description: 'Shortest path through equal-cost corridors.',
     details:
-      'BFS explores the maze in layers: every cell one step from the start, then every cell two steps away, and so on. Because every corridor costs the same here, the first time BFS reaches the goal it has found a shortest path.',
+      'BFS keeps a queue of cells to inspect and expands them in distance layers: all cells one move away, then two moves away, and so on. Because every corridor has the same cost, the first time the wave reaches the exit, that route is guaranteed to be shortest.',
     timeComplexity: 'O(V + E)',
     spaceComplexity: 'O(V)',
-    bestFor: 'Unweighted mazes where the shortest route matters.',
-    tradeOff: 'It can visit a lot of cells because it spreads evenly in every direction.',
+    bestFor: 'Unweighted mazes where shortest route matters.',
+    tradeOff: 'Can visit many cells because it spreads evenly.',
     watchFor:
-      'The frontier forms a widening wave from the start. When the goal first appears in that wave, the highlighted route is already shortest.',
+      'The frontier forms a widening wave; the first goal hit gives the route.',
     solve: solveWithBfs,
   },
   {
@@ -31,13 +31,13 @@ export const solverDefinitions: SolverDefinition[] = [
     category: 'mapBased',
     description: 'A deep exploratory walk that can find long routes quickly.',
     details:
-      'DFS commits to the newest branch and follows it until it cannot go farther, then backtracks. It feels like walking a corridor by instinct: very direct, sometimes lucky, but not careful about distance.',
+      'DFS uses a stack-like memory of choices. It follows the newest branch as far as possible, then backs up when that branch runs out of unvisited neighbors. It can hit the exit quickly in narrow mazes, but it does not compare route lengths while exploring.',
     timeComplexity: 'O(V + E)',
     spaceComplexity: 'O(V)',
-    bestFor: 'Fast exploration when any valid route is enough.',
-    tradeOff: 'It does not guarantee the shortest route and can wander deep into the wrong branch.',
+    bestFor: 'Fast exploration when any route is enough.',
+    tradeOff: 'No shortest-path guarantee; can dive into bad branches.',
     watchFor:
-      'The current cell dives down one corridor at a time. Backtracking starts when that branch runs out of unvisited neighbors.',
+      'The current cell dives down one corridor, then backs out at dead ends.',
     solve: solveWithDfs,
   },
   {
@@ -47,13 +47,13 @@ export const solverDefinitions: SolverDefinition[] = [
     category: 'mapBased',
     description: 'Uniform-cost search, ready for weighted mazes.',
     details:
-      'Dijkstra always expands the cheapest known route next. In this app each move costs one, so it behaves similarly to BFS, but the structure is ready for weighted terrain or penalties.',
+      'Dijkstra stores the cheapest known cost to each cell and always expands the lowest-cost candidate next. In this maze every move costs one, so its path length matches BFS, but the same structure would handle weighted terrain or penalties.',
     timeComplexity: 'O((V + E) log V)',
     spaceComplexity: 'O(V)',
-    bestFor: 'Weighted mazes where different cells or moves have different costs.',
-    tradeOff: 'Without a goal-directed heuristic it may still explore broadly before reaching the exit.',
+    bestFor: 'Weighted mazes with different move costs.',
+    tradeOff: 'No goal heuristic, so it can still explore broadly.',
     watchFor:
-      'Cells are chosen by the lowest known cost from the start. In this equal-cost maze, the wave looks close to BFS because every move costs one.',
+      'Cells are chosen by lowest known cost; equal costs make a BFS-like wave.',
     solve: (maze: Maze) =>
       solveWithWeightedSearch(maze, {
         algorithm: 'dijkstra',
@@ -69,13 +69,13 @@ export const solverDefinitions: SolverDefinition[] = [
     category: 'mapBased',
     description: 'Uses Manhattan distance to aim the search.',
     details:
-      'A* combines the route cost so far with a Manhattan-distance estimate to the goal. That estimate nudges the frontier toward the exit while still preserving optimal paths for this grid.',
+      'A* scores each candidate by combining the route cost so far with a Manhattan-distance estimate to the exit. The estimate pulls the frontier toward the goal, while the cost-so-far check keeps the route optimal for this grid.',
     timeComplexity: 'O((V + E) log V)',
     spaceComplexity: 'O(V)',
-    bestFor: 'Finding shortest paths quickly when a useful distance estimate exists.',
-    tradeOff: 'Its quality depends on the heuristic; a bad heuristic can remove much of the advantage.',
+    bestFor: 'Shortest paths with a good distance estimate.',
+    tradeOff: 'Depends on heuristic quality.',
     watchFor:
-      'The frontier leans toward the exit instead of spreading evenly. It still keeps enough alternatives open to preserve a shortest path.',
+      'The frontier leans toward the exit while keeping alternatives open.',
     solve: (maze: Maze) =>
       solveWithWeightedSearch(maze, {
         algorithm: 'astar',
@@ -91,13 +91,13 @@ export const solverDefinitions: SolverDefinition[] = [
     category: 'mapBased',
     description: 'Two heuristic frontiers meet in the middle.',
     details:
-      'Bidirectional A* launches one search head from the start and one from the goal. Each head still uses Manhattan distance, but the search depth is split between the two sides, which is often much cheaper on large maps.',
+      'Bidirectional A* runs two guided searches at the same time: one from the start and one from the goal. When the explored regions touch, the solver stitches the two partial routes together. Splitting the depth can reduce work dramatically on larger mazes.',
     timeComplexity: 'O(b^(d/2)) typical',
     spaceComplexity: 'O(b^(d/2)) typical',
-    bestFor: 'Large mazes with known start and goal positions.',
-    tradeOff: 'The bookkeeping is more complex, and the win depends on the two searches meeting cleanly.',
+    bestFor: 'Large mazes with known start and goal.',
+    tradeOff: 'More bookkeeping; benefit depends on meeting cleanly.',
     watchFor:
-      'Two search heads grow from opposite ends. The route appears when the start-side and goal-side explored regions connect.',
+      'Two fronts grow from opposite ends until their explored regions connect.',
     solve: solveWithBidirectionalAstar,
   },
   {
@@ -107,13 +107,13 @@ export const solverDefinitions: SolverDefinition[] = [
     category: 'mapBased',
     description: 'Distance labels spread from the goal, then guide the route.',
     details:
-      'Flood fill expands outward from the goal, labeling each reachable cell by distance. Once the wave reaches the maze, the solver starts at the entrance and follows lower labels step by step until it reaches the exit.',
+      'Flood fill first spreads distance labels outward from the goal, giving each reachable cell a number. After the labels are built, solving is simple: start at the entrance and repeatedly step into a neighboring cell with a smaller distance label.',
     timeComplexity: 'O(V + E)',
     spaceComplexity: 'O(V)',
-    bestFor: 'Mazes where a compact distance field can guide a clean route.',
-    tradeOff: 'It spends time labeling the reachable space before walking the final route.',
+    bestFor: 'Mazes where distance labels can guide the route.',
+    tradeOff: 'Labels reachable space before walking.',
     watchFor:
-      'Distance labels spread from the goal first. After labeling, the final path simply follows decreasing distances back to the exit.',
+      'Labels spread from the goal; the route follows decreasing distances.',
     solve: solveWithFloodFill,
   },
   {
@@ -123,13 +123,13 @@ export const solverDefinitions: SolverDefinition[] = [
     category: 'localWalker',
     description: 'Right-hand rule with one physical cursor.',
     details:
-      'The wall follower keeps one hand on a wall and chooses right, forward, left, then back. Once it reaches the exit, this visualizer loop-erases the walk so you can compare the messy physical run with the cleaned route.',
+      'Wall follower behaves like a tiny robot with almost no map memory. It keeps one hand on the wall and tries right, forward, left, then back. This works well in simply connected mazes, but the raw walk can loop around before the visualizer cleans it up.',
     timeComplexity: 'O(V) on simply connected mazes',
     spaceComplexity: 'O(1)',
-    bestFor: 'Robots with almost no memory in mazes without isolated wall islands.',
-    tradeOff: 'The run can take a long tour; pruning only happens after the exit is already found.',
+    bestFor: 'Tiny-memory robots in simply connected mazes.',
+    tradeOff: 'Can take a long tour before cleanup.',
     watchFor:
-      'The walker turns right whenever it can, otherwise goes forward, left, or back. The walked trail can be messy before the cleaned route is shown.',
+      'It turns right when possible; the trail may be messy before cleanup.',
     solve: solveWithWallFollower,
   },
   {
@@ -139,13 +139,13 @@ export const solverDefinitions: SolverDefinition[] = [
     category: 'mapBased',
     description: 'Simplifies the maze by pruning impossible corridors.',
     details:
-      'Dead-end filling repeatedly marks non-goal leaves as unusable. Once every dead end has been filled, the remaining corridor contains the solution route, making it a useful preprocessing idea for maze reasoning.',
+      'Dead-end filling reasons from the maze shape instead of walking from the start. It repeatedly removes dead-end corridors that cannot contain the goal. Once those branches are pruned away, the remaining connected corridor contains the solution path.',
     timeComplexity: 'O(V + E)',
     spaceComplexity: 'O(V)',
-    bestFor: 'Known perfect mazes or preprocessing passes that reveal the essential corridor.',
-    tradeOff: 'It needs enough map knowledge to identify dead ends before committing to the final route.',
+    bestFor: 'Known mazes where pruning can reveal the route.',
+    tradeOff: 'Needs map knowledge before committing.',
     watchFor:
-      'Dead ends disappear first. The useful corridor becomes clearer as leaves that cannot lead to the goal are removed.',
+      'Dead ends disappear first, leaving the useful corridor behind.',
     solve: solveWithDeadEndFilling,
   },
 ]

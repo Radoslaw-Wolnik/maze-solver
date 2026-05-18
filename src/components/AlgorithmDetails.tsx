@@ -7,65 +7,62 @@ type AlgorithmDetailsProps = {
 
 export function AlgorithmDetails({ algorithm }: AlgorithmDetailsProps) {
   return (
-    <section className="rounded-lg border border-zinc-200 bg-white p-4 shadow-sm">
-      <p className="text-sm font-medium text-sky-700">Current algorithm</p>
-      <h2 className="mt-1 text-lg font-semibold text-zinc-950">
-        {algorithm.title}
-      </h2>
-      <p className="mt-3 text-sm leading-6 text-zinc-600">{algorithm.details}</p>
+    <section className="rounded-lg border border-zinc-200 bg-white p-3">
+      <h2 className="text-base font-semibold text-zinc-950">How it works</h2>
+      <p className="mt-2 text-sm leading-5 text-zinc-600">
+        {algorithm.details}
+      </p>
 
-      <div className="mt-4 grid gap-3">
-        <div className="rounded-md bg-sky-50 p-3">
-          <div className="flex items-center gap-2 text-sm font-semibold text-sky-900">
-            <Target size={16} />
-            Best for
+      <div className="mt-2 grid grid-cols-2 gap-2 text-xs">
+        <div className="rounded-md bg-sky-50 px-2 py-1.5">
+          <div className="flex items-center gap-2 font-semibold text-sky-900">
+            <Target size={15} />
+            Best
           </div>
-          <p className="mt-1 text-sm leading-5 text-sky-900">
+          <p className="mt-0.5 leading-4 text-sky-900">
             {algorithm.bestFor}
           </p>
         </div>
-        <div className="rounded-md bg-amber-50 p-3">
-          <div className="flex items-center gap-2 text-sm font-semibold text-amber-950">
-            <Scale size={16} />
-            Trade-off
+        <div className="rounded-md bg-amber-50 px-2 py-1.5">
+          <div className="flex items-center gap-2 font-semibold text-amber-950">
+            <Scale size={15} />
+            Trade
           </div>
-          <p className="mt-1 text-sm leading-5 text-amber-950">
+          <p className="mt-0.5 leading-4 text-amber-950">
             {algorithm.tradeOff}
           </p>
         </div>
-        <div className="rounded-md bg-emerald-50 p-3">
-          <div className="flex items-center gap-2 text-sm font-semibold text-emerald-950">
-            <Lightbulb size={16} />
-            What to watch
+        <div className="col-span-2 rounded-md bg-emerald-50 px-2 py-1.5">
+          <div className="flex items-center gap-2 font-semibold text-emerald-950">
+            <Lightbulb size={15} />
+            Watch
           </div>
-          <p className="mt-1 text-sm leading-5 text-emerald-950">
+          <p className="mt-0.5 leading-4 text-emerald-950">
             {algorithm.watchFor}
           </p>
         </div>
       </div>
 
-      <div className="mt-4 grid grid-cols-2 gap-2 text-sm">
-        <div className="rounded-md bg-zinc-100 p-3">
-          <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
+      <div className="mt-2 grid grid-cols-2 gap-2 text-sm">
+        <div className="rounded-md bg-zinc-100 px-2 py-1.5">
+          <span className="block font-semibold uppercase text-zinc-500">
             Time
-          </p>
-          <p className="mt-1 font-medium text-zinc-950">
+          </span>
+          <span className="font-medium text-zinc-950">
             {algorithm.timeComplexity}
-          </p>
+          </span>
         </div>
-        <div className="rounded-md bg-zinc-100 p-3">
-          <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
+        <div className="rounded-md bg-zinc-100 px-2 py-1.5">
+          <span className="block font-semibold uppercase text-zinc-500">
             Space
-          </p>
-          <p className="mt-1 font-medium text-zinc-950">
+          </span>
+          <span className="font-medium text-zinc-950">
             {algorithm.spaceComplexity}
-          </p>
+          </span>
         </div>
       </div>
-      <p className="mt-3 text-xs leading-5 text-zinc-500">
-        Notation: V is the number of cells, E is the number of passages between
-        cells, b is the average branching choices per step, and d is the length
-        of the solution path.
+      <p className="mt-1 text-xs leading-4 text-zinc-500">
+        V = cells, E = passages, b = choices per step, d = solution length.
       </p>
     </section>
   )

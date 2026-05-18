@@ -7,6 +7,13 @@ type StatsPanelProps = {
 }
 
 export function StatsPanel({ result, snapshot }: StatsPanelProps) {
+  const displayLabel =
+    result.snapshots.find(
+      (candidate) =>
+        !candidate.label.startsWith('Shortest path found') &&
+        candidate.label !== 'No path found',
+    )?.label ?? snapshot.label
+
   const stats = [
     {
       label: 'Visited',
@@ -26,19 +33,20 @@ export function StatsPanel({ result, snapshot }: StatsPanelProps) {
   ]
 
   return (
-    <section className="rounded-lg border border-zinc-200 bg-white p-4 shadow-sm">
-      <p className="text-sm font-medium text-fuchsia-700">{result.title}</p>
-      <h2 className="mt-1 text-xl font-semibold text-zinc-950">
-        {snapshot.label}
+    <section className="rounded-lg border border-zinc-200 bg-white p-3">
+      <h2 className="text-xl font-semibold leading-6 text-zinc-950">
+        {result.title}
       </h2>
-      <p className="mt-2 text-sm leading-6 text-zinc-600">{result.description}</p>
+      <p className="mt-1 text-sm font-medium text-fuchsia-700">
+        {displayLabel}
+      </p>
 
-      <div className="mt-5 grid grid-cols-3 gap-2">
+      <div className="mt-2 grid grid-cols-3 gap-2">
         {stats.map((stat) => (
-          <div key={stat.label} className="rounded-md bg-zinc-100 p-3">
-            <stat.icon className="mb-2 text-zinc-500" size={16} />
+          <div key={stat.label} className="rounded-md bg-zinc-100 p-2.5">
+            <stat.icon className="mb-1 text-zinc-500" size={16} />
             <p className="text-lg font-semibold text-zinc-950">{stat.value}</p>
-            <p className="text-xs text-zinc-500">{stat.label}</p>
+            <p className="text-xs leading-4 text-zinc-500">{stat.label}</p>
           </div>
         ))}
       </div>
