@@ -44,6 +44,25 @@ export function AlgorithmDetails({ algorithm }: AlgorithmDetailsProps) {
           </p>
         </div>
       </div>
+
+      <div className="mt-4 grid grid-cols-2 gap-2 text-sm">
+        <div className="rounded-md bg-zinc-100 p-3">
+          <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
+            Time
+          </p>
+          <p className="mt-1 font-medium text-zinc-950">
+            {algorithm.timeComplexity}
+          </p>
+        </div>
+        <div className="rounded-md bg-zinc-100 p-3">
+          <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
+            Space
+          </p>
+          <p className="mt-1 font-medium text-zinc-950">
+            {algorithm.spaceComplexity}
+          </p>
+        </div>
+      </div>
     </section>
   )
 }

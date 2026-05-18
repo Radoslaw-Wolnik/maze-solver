@@ -1,5 +1,6 @@
 import clsx from 'clsx'
 import type { AlgorithmId, SolverResult } from '../maze/types'
+import { solverDefinitions } from '../maze/solvers'
 
 type ComparisonTableProps = {
   results: SolverResult[]
@@ -12,6 +13,10 @@ export function ComparisonTable({
   selected,
   onSelect,
 }: ComparisonTableProps) {
+  const categoryByAlgorithm = new Map(
+    solverDefinitions.map((definition) => [definition.id, definition.category]),
+  )
+
   return (
     <section className="rounded-lg border border-zinc-200 bg-white p-4 shadow-sm">
       <h2 className="text-lg font-semibold text-zinc-950">Algorithm comparison</h2>
@@ -20,6 +25,7 @@ export function ComparisonTable({
           <thead className="bg-zinc-100 text-xs uppercase tracking-wide text-zinc-500">
             <tr>
               <th className="px-3 py-2">Solver</th>
+              <th className="px-3 py-2">Type</th>
               <th className="px-3 py-2">Visited</th>
               <th className="px-3 py-2">Path</th>
               <th className="px-3 py-2">Frames</th>
@@ -41,6 +47,17 @@ export function ComparisonTable({
                     onClick={() => onSelect(result.algorithm)}
                   >
                     {result.title}
+                  </button>
+                </td>
+                <td className="p-0">
+                  <button
+                    type="button"
+                    className="block w-full px-3 py-2 text-left text-zinc-600 hover:bg-zinc-100"
+                    onClick={() => onSelect(result.algorithm)}
+                  >
+                    {categoryByAlgorithm.get(result.algorithm) === 'multiHead'
+                      ? 'Multi'
+                      : 'Single'}
                   </button>
                 </td>
                 <td className="p-0">

@@ -38,7 +38,10 @@ function App() {
     resetKey: `${algorithm}-${seed}-${size}`,
   })
 
-  const snapshot = selectedResult.snapshots[playback.frame]
+  const snapshot =
+    selectedResult.snapshots[
+      Math.min(playback.frame, selectedResult.snapshots.length - 1)
+    ]
 
   return (
     <main className="min-h-screen bg-zinc-50 text-zinc-900">

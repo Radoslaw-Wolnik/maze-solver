@@ -12,6 +12,7 @@ export function MazeBoard({ maze, snapshot }: MazeBoardProps) {
   const frontier = new Set(snapshot.frontier)
   const path = new Set(snapshot.path)
   const current = snapshot.current ? cellKey(snapshot.current) : undefined
+  const currentHeads = new Set(snapshot.currentHeads?.map(cellKey) ?? [])
 
   return (
     <div className="rounded-lg border border-zinc-200 bg-white p-3 shadow-sm">
@@ -54,7 +55,7 @@ export function MazeBoard({ maze, snapshot }: MazeBoardProps) {
               {path.has(key) && !isStart && !isGoal && (
                 <span className="absolute inset-[20%] rounded-sm bg-emerald-700/45" />
               )}
-              {current === key && (
+              {(current === key || currentHeads.has(key)) && (
                 <span className="absolute inset-0 z-10 rounded-[2px] ring-2 ring-inset ring-white shadow-[inset_0_0_0_3px_rgba(5,150,105,0.9)]" />
               )}
               {(isStart || isGoal) && (
