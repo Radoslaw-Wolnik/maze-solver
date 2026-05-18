@@ -28,13 +28,14 @@ export function MazeBoard({ maze, snapshot }: MazeBoardProps) {
           const key = cellKey(cell)
           const isStart = sameCell(cell, maze.start)
           const isGoal = sameCell(cell, maze.goal)
+          const isHead = current === key || currentHeads.has(key)
 
           return (
             <div
               key={key}
               className={clsx(
                 'relative min-h-0 transition-colors duration-150',
-                visited.has(key) && 'bg-sky-100',
+                isHead ? 'bg-yellow-200' : visited.has(key) && 'bg-sky-100',
               )}
               style={{
                 borderTop: cell.walls.north
@@ -59,9 +60,6 @@ export function MazeBoard({ maze, snapshot }: MazeBoardProps) {
               )}
               {path.has(key) && !isStart && !isGoal && (
                 <span className="absolute inset-[18%] rounded-full bg-emerald-500/75 shadow-[0_0_0_1px_rgba(4,120,87,0.25)]" />
-              )}
-              {(current === key || currentHeads.has(key)) && (
-                <span className="absolute inset-[22%] z-10 rounded-full bg-violet-600 shadow-[0_0_0_2px_rgba(255,255,255,0.95),0_0_0_4px_rgba(109,40,217,0.35)]" />
               )}
               {(isStart || isGoal) && (
                 <span
