@@ -40,7 +40,7 @@ export function AlgorithmDetails({ algorithm }: AlgorithmDetailsProps) {
           </div>
           <p className="mt-1 text-sm leading-5 text-emerald-950">
             Watch the outlined head, amber queued candidates, and route overlays.
-            Green is the start-side route; purple is a goal-side route when an algorithm has one.
+            Green circles trace route previews, and the violet dot marks the cell being evaluated now.
           </p>
         </div>
       </div>

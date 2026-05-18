@@ -74,12 +74,12 @@ function App() {
                   start route
                 </span>
                 <span className="inline-flex items-center gap-2 rounded-md bg-white px-3 py-2 text-zinc-800 ring-1 ring-zinc-200">
-                  <span className="h-3 w-2 rounded-[2px] bg-violet-600" />
+                  <span className="h-3 w-3 rounded-full bg-emerald-700/80" />
                   goal route
                 </span>
                 <span className="inline-flex items-center gap-2 rounded-md bg-white px-3 py-2 text-zinc-800 ring-1 ring-zinc-200">
-                  <span className="h-4 w-4 rounded-[2px] border-2 border-white shadow-[inset_0_0_0_2px_rgba(5,150,105,0.9),0_0_0_1px_rgba(24,24,27,0.15)]" />
-                  current cell - outline
+                  <span className="h-3 w-3 rounded-full bg-violet-600 shadow-[0_0_0_2px_rgba(255,255,255,0.95),0_0_0_3px_rgba(109,40,217,0.3)]" />
+                  current cell
                 </span>
               </div>
             </div>

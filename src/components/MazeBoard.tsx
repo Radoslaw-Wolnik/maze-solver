@@ -55,13 +55,13 @@ export function MazeBoard({ maze, snapshot }: MazeBoardProps) {
                 <span className="absolute inset-[24%] rounded-sm bg-amber-300/85 shadow-[0_0_0_1px_rgba(146,64,14,0.25)]" />
               )}
               {secondaryPath.has(key) && !isStart && !isGoal && (
-                <span className="absolute inset-x-[30%] inset-y-[18%] rounded-sm bg-violet-600/65" />
+                <span className="absolute inset-[28%] rounded-full bg-emerald-700/70 shadow-[0_0_0_1px_rgba(4,120,87,0.2)]" />
               )}
               {path.has(key) && !isStart && !isGoal && (
-                <span className="absolute inset-[18%] rounded-sm bg-emerald-600/75 shadow-[0_0_0_1px_rgba(4,120,87,0.25)]" />
+                <span className="absolute inset-[18%] rounded-full bg-emerald-500/75 shadow-[0_0_0_1px_rgba(4,120,87,0.25)]" />
               )}
               {(current === key || currentHeads.has(key)) && (
-                <span className="absolute inset-0 z-10 rounded-[2px] ring-2 ring-inset ring-white shadow-[inset_0_0_0_3px_rgba(5,150,105,0.9)]" />
+                <span className="absolute inset-[22%] z-10 rounded-full bg-violet-600 shadow-[0_0_0_2px_rgba(255,255,255,0.95),0_0_0_4px_rgba(109,40,217,0.35)]" />
               )}
               {(isStart || isGoal) && (
                 <span
