@@ -1,4 +1,14 @@
-export type AlgorithmId = 'bfs' | 'dfs' | 'dijkstra' | 'astar'
+export type AlgorithmCategory = 'multiHead' | 'singleHead'
+
+export type AlgorithmId =
+  | 'bfs'
+  | 'dfs'
+  | 'dijkstra'
+  | 'astar'
+  | 'bidirectionalAstar'
+  | 'floodFill'
+  | 'wallFollower'
+  | 'deadEndFilling'
 
 export type Direction = 'north' | 'east' | 'south' | 'west'
 
@@ -24,6 +34,7 @@ export type Maze = {
 export type SolverSnapshot = {
   id: number
   current?: Coordinate
+  currentHeads?: Coordinate[]
   visited: string[]
   frontier: string[]
   path: string[]
@@ -45,8 +56,11 @@ export type SolverDefinition = {
   id: AlgorithmId
   title: string
   shortName: string
+  category: AlgorithmCategory
   description: string
   details: string
+  timeComplexity: string
+  spaceComplexity: string
   bestFor: string
   tradeOff: string
   solve: (maze: Maze) => SolverResult

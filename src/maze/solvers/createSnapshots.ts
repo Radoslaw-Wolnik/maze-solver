@@ -3,6 +3,7 @@ import type { AlgorithmId, Coordinate, SolverResult, SolverSnapshot } from '../t
 
 export type SearchTrace = {
   current: Coordinate
+  currentHeads?: Coordinate[]
   visited: Set<string>
   frontier: Coordinate[]
   path: Coordinate[]
@@ -28,6 +29,7 @@ export function toResult({
   const snapshots: SolverSnapshot[] = traces.map((trace, index) => ({
     id: index,
     current: trace.current,
+    currentHeads: trace.currentHeads?.length ? trace.currentHeads : undefined,
     visited: [...trace.visited],
     frontier: trace.frontier.map(cellKey),
     path: trace.path.map(cellKey),
