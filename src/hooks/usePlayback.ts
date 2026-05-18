@@ -43,7 +43,7 @@ export function usePlayback({ frameCount, speed, resetKey }: PlaybackOptions) {
     play: () => setIsPlaying(true),
     reset: () => {
       setFrame(0)
-      setIsPlaying(false)
+      setIsPlaying(true)
     },
     step: () => {
       setFrame((current) => Math.min(current + 1, frameCount - 1))
