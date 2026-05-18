@@ -6,6 +6,7 @@ import {
   SkipForward,
   StepForward,
 } from 'lucide-react'
+import type { CSSProperties } from 'react'
 
 type PlaybackControlsProps = {
   isPlaying: boolean
@@ -23,6 +24,52 @@ type PlaybackControlsProps = {
   onSizeChange: (size: number) => void
 }
 
+type Rgb = {
+  red: number
+  green: number
+  blue: number
+}
+
+function rangePercent(value: number, min: number, max: number) {
+  return ((value - min) / (max - min)) * 100
+}
+
+function hexToRgb(hex: string): Rgb {
+  const value = hex.replace('#', '')
+
+  return {
+    red: parseInt(value.slice(0, 2), 16),
+    green: parseInt(value.slice(2, 4), 16),
+    blue: parseInt(value.slice(4, 6), 16),
+  }
+}
+
+function gradientColor(start: string, end: string, percent: number) {
+  const startRgb = hexToRgb(start)
+  const endRgb = hexToRgb(end)
+  const ratio = percent / 100
+  const mix = (from: number, to: number) => Math.round(from + (to - from) * ratio)
+
+  return `rgb(${mix(startRgb.red, endRgb.red)}, ${mix(startRgb.green, endRgb.green)}, ${mix(startRgb.blue, endRgb.blue)})`
+}
+
+function rangeStyle({
+  percent,
+  start,
+  end,
+}: {
+  percent: number
+  start: string
+  end: string
+}) {
+  return {
+    '--range-progress': `${percent}%`,
+    '--range-start': start,
+    '--range-end': end,
+    '--thumb-color': gradientColor(start, end, percent),
+  } as CSSProperties
+}
+
 export function PlaybackControls({
   isPlaying,
   progress,
@@ -38,6 +85,9 @@ export function PlaybackControls({
   onSpeedChange,
   onSizeChange,
 }: PlaybackControlsProps) {
+  const speedPercent = rangePercent(speedLevel, 1, 10)
+  const sizePercent = rangePercent(size, 9, 31)
+
   return (
     <section className="rounded-lg border border-zinc-200 bg-white p-4 shadow-sm">
       <div className="mb-4 flex flex-wrap items-center gap-2">
@@ -78,10 +128,10 @@ export function PlaybackControls({
         </button>
       </div>
 
-      <div className="mb-4 h-2 overflow-hidden rounded-full bg-zinc-100 shadow-inner">
+      <div className="relative mb-4 h-2 overflow-hidden rounded-full bg-gradient-to-r from-sky-500 to-emerald-500 shadow-inner">
         <div
-          className="h-full rounded-full bg-gradient-to-r from-sky-500 to-emerald-500 transition-all"
-          style={{ width: `${progress}%` }}
+          className="absolute inset-y-0 right-0 bg-zinc-100 transition-all"
+          style={{ width: `${100 - progress}%` }}
         />
       </div>
 
@@ -99,6 +149,11 @@ export function PlaybackControls({
             value={speedLevel}
             onChange={(event) => onSpeedChange(Number(event.target.value))}
             className="range-control range-control-speed"
+            style={rangeStyle({
+              percent: speedPercent,
+              start: '#bae6fd',
+              end: '#2dd4bf',
+            })}
           />
         </label>
         <label className="grid gap-2 text-sm font-medium text-zinc-700">
@@ -114,6 +169,11 @@ export function PlaybackControls({
             value={size}
             onChange={(event) => onSizeChange(Number(event.target.value))}
             className="range-control range-control-size"
+            style={rangeStyle({
+              percent: sizePercent,
+              start: '#e4e4e7',
+              end: '#38bdf8',
+            })}
           />
         </label>
       </div>
