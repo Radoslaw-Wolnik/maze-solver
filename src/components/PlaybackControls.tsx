@@ -78,9 +78,9 @@ export function PlaybackControls({
         </button>
       </div>
 
-      <div className="mb-4 h-2 overflow-hidden rounded-full bg-zinc-100">
+      <div className="mb-4 h-2 overflow-hidden rounded-full bg-zinc-100 shadow-inner">
         <div
-          className="h-full rounded-full bg-gradient-to-r from-sky-500 via-fuchsia-500 to-emerald-500 transition-all"
+          className="h-full rounded-full bg-gradient-to-r from-sky-500 to-emerald-500 transition-all"
           style={{ width: `${progress}%` }}
         />
       </div>
