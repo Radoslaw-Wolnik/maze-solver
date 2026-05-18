@@ -1,14 +1,20 @@
-# Maze Solver · Algorithm Explorer
+# Maze Solver - Algorithm Explorer
 
-A polished React + TypeScript app for watching classic graph-search algorithms solve generated mazes. The point is not only getting the answer; it is seeing how each algorithm explores the maze, how its frontier grows, and how much work it does before the final path appears.
+A React + TypeScript visualizer for watching classic maze-solving algorithms work
+through the same generated maze. The app is built to make the search behavior
+visible: visited cells, queued candidates, active heads, route previews, and the
+final path all update frame by frame.
+
+![Maze Solver app view](docs/app-screenshot.png)
 
 ## What it does
 
-- Generates a perfect maze with a seeded recursive backtracker.
-- Animates four solving algorithms frame by frame.
-- Highlights visited cells, frontier cells, the current cell, and the final route.
-- Lets you change maze size, speed, selected algorithm, and maze seed.
-- Compares algorithms side by side with visited count, path length, and frame count.
+- Generates perfect mazes with a seeded recursive backtracker.
+- Animates eight solving strategies with playback controls.
+- Shows visited cells, queued candidates, current cell, route previews, and final path.
+- Compares algorithms by visited cells, path length, and total frames.
+- Explains each algorithm with focused notes, trade-offs, complexity notation, and what to watch in the animation.
+- Keeps the desktop UI in one workspace with the algorithm picker, maze, controls, comparison table, and details visible together.
 
 ## Getting started
 
@@ -21,32 +27,61 @@ npm test
 
 The dev server defaults to `http://localhost:5173`.
 
-## The algorithms
+## Algorithms
 
 ### Breadth-first search
 
-Breadth-first search explores the maze in distance layers. In an unweighted maze, the first time it reaches the goal is guaranteed to be through a shortest path. It is dependable and easy to reason about, but the frontier can grow wide.
+BFS explores the maze in distance layers. In an unweighted maze, the first time it
+reaches the goal is guaranteed to be a shortest path. It is dependable, but the
+frontier can grow wide.
 
 ### Depth-first search
 
-Depth-first search follows one branch as far as it can before backing out. It can find a route quickly in narrow mazes and uses little memory, but it does not guarantee the shortest route.
+DFS follows one branch as far as possible before backing out. It can find a route
+quickly in narrow mazes, but it does not guarantee the shortest route.
 
 ### Dijkstra
 
-Dijkstra's algorithm expands the cheapest known route first. In this project every corridor has equal cost, so it matches BFS on path length, but the implementation is ready for weighted cells.
+Dijkstra expands the cheapest known route first. Every corridor currently has the
+same cost, so it behaves close to BFS, but the implementation is ready for weighted
+movement costs.
 
 ### A* search
 
-A* adds a Manhattan-distance heuristic to Dijkstra's cost model. It still finds an optimal path for this maze setup, but it usually reaches the goal with fewer explored cells because it has a sense of direction.
+A* combines route cost with a Manhattan-distance estimate to the goal. The heuristic
+pulls the frontier toward the exit while preserving optimal paths for this grid.
+
+### Bidirectional A*
+
+Bidirectional A* runs guided searches from the start and the goal at the same time.
+When the frontiers meet, the app stitches the two partial routes together.
+
+### Flood fill
+
+Flood fill builds a distance field from the goal, then walks from the start through
+neighboring cells with lower distance labels until it reaches the exit.
+
+### Wall follower
+
+Wall follower behaves like a simple robot keeping one hand on a wall. It uses almost
+no memory, but the raw route can be messy before the visualizer cleans it up.
+
+### Dead-end filling
+
+Dead-end filling repeatedly removes corridors that cannot contain the goal. Once
+the dead ends are gone, the remaining corridor reveals the solution route.
 
 ## Code structure
 
-`src/maze/` contains pure maze logic with no React dependency. `generateMaze.ts` creates perfect mazes, `grid.ts` handles wall and neighbor operations, and `solvers/` contains the BFS, DFS, Dijkstra, and A* implementations.
+`src/maze/` contains pure maze logic with no React dependency. `generateMaze.ts`
+creates perfect mazes, `grid.ts` handles walls and neighbors, and `solvers/`
+contains the algorithm implementations.
 
-`src/components/` contains the UI: maze rendering, playback controls, algorithm tabs, stats, and comparison table.
+`src/components/` contains the UI: maze rendering, playback controls, algorithm
+picker, stats, comparison table, and algorithm details.
 
 `src/hooks/` contains reusable React state for animation playback.
 
 ## Built with
 
-React, TypeScript, Vite, Tailwind CSS, Lucide icons, Vitest.
+React, TypeScript, Vite, Tailwind CSS, Lucide icons, and Vitest.
