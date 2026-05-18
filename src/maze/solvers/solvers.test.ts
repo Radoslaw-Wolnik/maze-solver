@@ -46,10 +46,10 @@ describe('maze solvers', () => {
   it('keeps algorithms grouped by search style', () => {
     const categories = new Set(solverDefinitions.map((solver) => solver.category))
 
-    expect(categories).toEqual(new Set(['multiHead', 'singleHead']))
-    expect(solverDefinitions.filter((solver) => solver.category === 'multiHead').length)
+    expect(categories).toEqual(new Set(['mapBased', 'localWalker']))
+    expect(solverDefinitions.filter((solver) => solver.category === 'mapBased').length)
       .toBeGreaterThan(0)
-    expect(solverDefinitions.filter((solver) => solver.category === 'singleHead').length)
+    expect(solverDefinitions.filter((solver) => solver.category === 'localWalker').length)
       .toBeGreaterThan(0)
   })
 

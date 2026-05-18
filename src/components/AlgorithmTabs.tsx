@@ -18,14 +18,14 @@ export function AlgorithmTabs({
     description: string
   }> = [
     {
-      category: 'multiHead',
-      title: 'Multi-head / global map',
-      description: 'Several candidates or frontiers can be evaluated at once.',
+      category: 'mapBased',
+      title: 'Map-based planners',
+      description: 'These solvers use the known maze graph and manage candidate frontiers.',
     },
     {
-      category: 'singleHead',
-      title: 'Single-head / micromouse',
-      description: 'One active cursor moves through the maze step by step.',
+      category: 'localWalker',
+      title: 'Local walkers',
+      description: 'These solvers move as one cursor without planning from the full map first.',
     },
   ]
 

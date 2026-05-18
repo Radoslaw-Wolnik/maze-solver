@@ -55,9 +55,9 @@ export function ComparisonTable({
                     className="block w-full px-3 py-2 text-left text-zinc-600 hover:bg-zinc-100"
                     onClick={() => onSelect(result.algorithm)}
                   >
-                    {categoryByAlgorithm.get(result.algorithm) === 'multiHead'
-                      ? 'Multi'
-                      : 'Single'}
+                    {categoryByAlgorithm.get(result.algorithm) === 'mapBased'
+                      ? 'Map'
+                      : 'Local'}
                   </button>
                 </td>
                 <td className="p-0">

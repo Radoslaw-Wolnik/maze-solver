@@ -1,4 +1,4 @@
-export type AlgorithmCategory = 'multiHead' | 'singleHead'
+export type AlgorithmCategory = 'mapBased' | 'localWalker'
 
 export type AlgorithmId =
   | 'bfs'

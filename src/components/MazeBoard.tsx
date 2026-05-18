@@ -12,7 +12,6 @@ export function MazeBoard({ maze, snapshot }: MazeBoardProps) {
   const frontier = new Set(snapshot.frontier)
   const path = new Set(snapshot.path)
   const secondaryPath = new Set(snapshot.secondaryPath ?? [])
-  const walkedTrail = new Set(snapshot.walkedTrail ?? [])
   const current = snapshot.current ? cellKey(snapshot.current) : undefined
   const currentHeads = new Set(snapshot.currentHeads?.map(cellKey) ?? [])
 
@@ -36,7 +35,6 @@ export function MazeBoard({ maze, snapshot }: MazeBoardProps) {
               className={clsx(
                 'relative min-h-0 transition-colors duration-150',
                 visited.has(key) && 'bg-sky-100',
-                frontier.has(key) && 'bg-amber-200',
               )}
               style={{
                 borderTop: cell.walls.north
@@ -53,8 +51,8 @@ export function MazeBoard({ maze, snapshot }: MazeBoardProps) {
                   : '2px solid rgba(212, 212, 216, 0.4)',
               }}
             >
-              {walkedTrail.has(key) && !isStart && !isGoal && (
-                <span className="absolute inset-[34%] rounded-sm bg-teal-600/45" />
+              {frontier.has(key) && !isStart && !isGoal && (
+                <span className="absolute inset-[24%] rounded-sm bg-amber-300/85 shadow-[0_0_0_1px_rgba(146,64,14,0.25)]" />
               )}
               {secondaryPath.has(key) && !isStart && !isGoal && (
                 <span className="absolute inset-x-[30%] inset-y-[18%] rounded-sm bg-violet-600/65" />

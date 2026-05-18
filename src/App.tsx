@@ -58,8 +58,8 @@ function App() {
                 </h1>
                 <p className="mt-3 max-w-2xl text-sm leading-6 text-zinc-600 md:text-base">
                   Generate a perfect maze, choose a strategy, and watch the
-                  frontier, active head, route previews, and final route appear
-                  frame by frame.
+                  visited cells, queued candidates, active head, route previews,
+                  and final route appear frame by frame.
                 </p>
               </div>
               <div className="flex flex-wrap gap-3 text-sm">
@@ -67,7 +67,7 @@ function App() {
                   visited
                 </span>
                 <span className="rounded-md bg-amber-200 px-3 py-2 text-amber-950">
-                  frontier
+                  queued candidate
                 </span>
                 <span className="inline-flex items-center gap-2 rounded-md bg-white px-3 py-2 text-zinc-800 ring-1 ring-zinc-200">
                   <span className="h-3 w-3 rounded-[2px] bg-emerald-500" />
@@ -76,10 +76,6 @@ function App() {
                 <span className="inline-flex items-center gap-2 rounded-md bg-white px-3 py-2 text-zinc-800 ring-1 ring-zinc-200">
                   <span className="h-3 w-2 rounded-[2px] bg-violet-600" />
                   goal route
-                </span>
-                <span className="inline-flex items-center gap-2 rounded-md bg-white px-3 py-2 text-zinc-800 ring-1 ring-zinc-200">
-                  <span className="h-2 w-2 rounded-[2px] bg-teal-600/70" />
-                  walked trail
                 </span>
                 <span className="inline-flex items-center gap-2 rounded-md bg-white px-3 py-2 text-zinc-800 ring-1 ring-zinc-200">
                   <span className="h-4 w-4 rounded-[2px] border-2 border-white shadow-[inset_0_0_0_2px_rgba(5,150,105,0.9),0_0_0_1px_rgba(24,24,27,0.15)]" />
