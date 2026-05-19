@@ -1,62 +1,222 @@
 @import "tailwindcss";
 
-body {
-  margin: 0;
-  min-width: 320px;
-  background: #fafafa;
-  font-family:
-    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    sans-serif;
+@theme {
+  --font-sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --color-maze-page: #fafafa;
+  --color-maze-focus: #0284c7;
+  --color-maze-wall: #18181b;
+  --color-maze-passage: rgb(212 212 216 / 0.4);
 }
 
-button,
-input {
-  font: inherit;
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  body {
+    margin: 0;
+    min-width: 320px;
+    background: var(--color-maze-page);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  button,
+  input {
+    font: inherit;
+  }
+
+  button:focus-visible,
+  input:focus-visible {
+    outline: 2px solid var(--color-maze-focus);
+    outline-offset: 2px;
+  }
 }
 
-button:focus-visible,
-input:focus-visible {
-  outline: 2px solid #0284c7;
-  outline-offset: 2px;
-}
+@layer components {
+  .app-shell {
+    border: 1px solid var(--color-zinc-200);
+    border-radius: var(--radius-lg);
+    background: white;
+    box-shadow: var(--shadow-sm);
+  }
 
-.range-control {
-  height: 0.65rem;
-  appearance: none;
-  cursor: pointer;
-  border-radius: 999px;
-  border: 1px solid rgba(228, 228, 231, 0.9);
-  background: linear-gradient(
-    90deg,
-    var(--range-start) 0%,
-    var(--range-end) var(--range-progress),
-    #e4e4e7 var(--range-progress),
-    #e4e4e7 100%
-  );
-  box-shadow:
-    inset 0 1px 2px rgba(24, 24, 27, 0.08),
-    0 1px 0 rgba(255, 255, 255, 0.9);
-}
+  .app-panel {
+    border: 1px solid var(--color-zinc-200);
+    border-radius: var(--radius-lg);
+    background: white;
+    padding: 0.75rem;
+  }
 
-.range-control::-webkit-slider-thumb {
-  height: 1.1rem;
-  width: 1.1rem;
-  appearance: none;
-  border: 2px solid #ffffff;
-  border-radius: 999px;
-  background: var(--thumb-color);
-  box-shadow:
-    0 1px 6px rgba(24, 24, 27, 0.22),
-    0 0 0 1px color-mix(in srgb, var(--thumb-color), #18181b 18%);
-}
+  .control-button {
+    display: inline-flex;
+    height: 2.25rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md);
+    transition:
+      background-color 150ms ease,
+      border-color 150ms ease,
+      color 150ms ease;
+  }
 
-.range-control::-moz-range-thumb {
-  height: 1.1rem;
-  width: 1.1rem;
-  border: 2px solid #ffffff;
-  border-radius: 999px;
-  background: var(--thumb-color);
-  box-shadow:
-    0 1px 6px rgba(24, 24, 27, 0.22),
-    0 0 0 1px color-mix(in srgb, var(--thumb-color), #18181b 18%);
+  .control-button-icon {
+    width: 2.25rem;
+  }
+
+  .control-button-label {
+    gap: 0.5rem;
+    padding-inline: 0.75rem;
+    font-size: var(--text-sm);
+    font-weight: 500;
+  }
+
+  .control-button-primary {
+    background: var(--color-zinc-950);
+    color: white;
+  }
+
+  .control-button-primary:hover {
+    background: var(--color-zinc-800);
+  }
+
+  .control-button-secondary {
+    border: 1px solid var(--color-zinc-200);
+    background: white;
+    color: var(--color-zinc-800);
+  }
+
+  .control-button-secondary:hover {
+    background: var(--color-zinc-100);
+  }
+
+  .maze-board-viewport {
+    container-type: size;
+  }
+
+  .maze-board-frame {
+    width: min(100cqw, 100cqh);
+    height: min(100cqw, 100cqh);
+    border: 1px solid var(--color-zinc-200);
+    border-radius: var(--radius-lg);
+    background: white;
+    padding: 0.375rem;
+  }
+
+  .maze-cell {
+    border-color: var(--color-maze-passage);
+    border-style: solid;
+    border-width: 2px;
+  }
+
+  .maze-cell-wall-north {
+    border-top-color: var(--color-maze-wall);
+  }
+
+  .maze-cell-wall-east {
+    border-right-color: var(--color-maze-wall);
+  }
+
+  .maze-cell-wall-south {
+    border-bottom-color: var(--color-maze-wall);
+  }
+
+  .maze-cell-wall-west {
+    border-left-color: var(--color-maze-wall);
+  }
+
+  .maze-marker {
+    position: absolute;
+    border-radius: 999px;
+  }
+
+  .maze-marker-secondary {
+    inset: 28%;
+    background: rgb(4 120 87 / 0.7);
+    box-shadow: 0 0 0 1px rgb(4 120 87 / 0.2);
+  }
+
+  .maze-marker-path {
+    inset: 18%;
+    background: rgb(16 185 129 / 0.75);
+    box-shadow: 0 0 0 1px rgb(4 120 87 / 0.25);
+  }
+
+  .maze-marker-current {
+    inset: 22%;
+    z-index: 10;
+    background: var(--color-violet-600);
+    box-shadow:
+      0 0 0 2px rgb(255 255 255 / 0.95),
+      0 0 0 4px rgb(109 40 217 / 0.35);
+  }
+
+  .maze-current-ring {
+    box-shadow:
+      0 0 0 2px rgb(255 255 255 / 0.95),
+      0 0 0 3px rgb(109 40 217 / 0.3);
+  }
+
+  .maze-terminal-marker {
+    position: absolute;
+    inset: 0.25rem;
+    z-index: 20;
+    border-radius: 2px;
+  }
+
+  .range-control {
+    --range-progress: 0%;
+    --range-start: var(--color-zinc-200);
+    --range-end: var(--color-sky-400);
+    --thumb-color: var(--range-end);
+
+    height: 0.65rem;
+    appearance: none;
+    cursor: pointer;
+    border: 1px solid rgb(228 228 231 / 0.9);
+    border-radius: 999px;
+    background: linear-gradient(
+      90deg,
+      var(--range-start) 0%,
+      var(--range-end) var(--range-progress),
+      var(--color-zinc-200) var(--range-progress),
+      var(--color-zinc-200) 100%
+    );
+    box-shadow:
+      inset 0 1px 2px rgb(24 24 27 / 0.08),
+      0 1px 0 rgb(255 255 255 / 0.9);
+  }
+
+  .range-control-speed {
+    --range-start: var(--color-sky-200);
+    --range-end: var(--color-teal-400);
+  }
+
+  .range-control-size {
+    --range-start: var(--color-zinc-200);
+    --range-end: var(--color-sky-400);
+  }
+
+  .range-control::-webkit-slider-thumb {
+    width: 1.1rem;
+    height: 1.1rem;
+    appearance: none;
+    border: 2px solid white;
+    border-radius: 999px;
+    background: var(--thumb-color);
+    box-shadow:
+      0 1px 6px rgb(24 24 27 / 0.22),
+      0 0 0 1px color-mix(in srgb, var(--thumb-color), var(--color-zinc-900) 18%);
+  }
+
+  .range-control::-moz-range-thumb {
+    width: 1.1rem;
+    height: 1.1rem;
+    border: 2px solid white;
+    border-radius: 999px;
+    background: var(--thumb-color);
+    box-shadow:
+      0 1px 6px rgb(24 24 27 / 0.22),
+      0 0 0 1px color-mix(in srgb, var(--thumb-color), var(--color-zinc-900) 18%);
+  }
 }

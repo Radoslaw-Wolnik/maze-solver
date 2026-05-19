@@ -32,7 +32,7 @@ export function AlgorithmTabs({
             </span>
             <span
               className={clsx(
-                'mt-0.5 block overflow-hidden text-xs leading-4 [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2]',
+                'mt-0.5 block line-clamp-2 text-xs leading-4',
                 selected === algorithm.id ? 'text-zinc-300' : 'text-zinc-500',
               )}
             >

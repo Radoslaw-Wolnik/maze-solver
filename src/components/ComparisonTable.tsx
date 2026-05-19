@@ -13,7 +13,7 @@ export function ComparisonTable({
   onSelect,
 }: ComparisonTableProps) {
   return (
-    <section className="rounded-lg border border-zinc-200 bg-white p-3">
+    <section className="app-panel">
       <h2 className="text-base font-semibold text-zinc-950">Algorithm comparison</h2>
       <div className="mt-2 overflow-hidden rounded-md border border-zinc-200">
         <table className="w-full text-left text-xs">

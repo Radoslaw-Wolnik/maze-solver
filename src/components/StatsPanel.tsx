@@ -33,7 +33,7 @@ export function StatsPanel({ result, snapshot }: StatsPanelProps) {
   ]
 
   return (
-    <section className="rounded-lg border border-zinc-200 bg-white p-3">
+    <section className="app-panel">
       <h2 className="text-xl font-semibold leading-6 text-zinc-950">
         {result.title}
       </h2>
